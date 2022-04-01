@@ -1,25 +1,40 @@
-import logo from './logo.svg';
-import './App.css';
+import React, {useState} from 'react';
+import items from './data';
+import Navbar from './Navbar';
+import Categories from './Categories';
+import Menu from './Menu';
 
-function App() {
+const allCategories = ['all', ...new Set(items.map((item) => item.category))];
+
+const App = () => {
+  const [menuItems, setMenuItems] = useState(items);
+  const [categories, setCategories] = useState(allCategories);
+
+  const filterItems = (category) => {
+    if (category === 'all') {
+      setMenuItems(items)
+      return;
+    }
+
+    const newCategory = items.filter((item) => item.category === category);
+    setMenuItems(newCategory);
+  };
+  
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    <>
+      <Navbar />
+      <main>
+        <section className="section menu">
+          <div className="title">
+            <h2>our menu</h2>
+            <div className="underline"></div>
+          </div>
+          <Categories categories={categories} filterItems={filterItems} />
+          <Menu menuItems={menuItems}/>
+        </section>
+      </main>
+    </>
+  )
 }
 
-export default App;
+export default App
